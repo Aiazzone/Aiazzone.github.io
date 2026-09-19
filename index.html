@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Simone Zuliani — chartered electrical engineer writing desktop software in Python and Qt. Creator of IVE, an open-source video editor.">
+<meta name="theme-color" content="#1a1b26">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Simone Zuliani">
+<meta property="og:description" content="Chartered electrical engineer who writes desktop software. Python and Qt.">
+<title>Simone Zuliani</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+  /* ── Theme tokens ──────────────────────────────────────────────
+     Palettes and the six-step "field" ramp are lifted from the
+     Omarchy theme set. Tokyo Night is the default; the switcher
+     stamps data-theme on :root.                                   */
+
+  :root {
+    --bg-deep: #13141c;  --bg: #1a1b26;
+    --surface: #1f2230;  --surface-2: #24283b;
+    --border-subtle: #24283b; --border-strong: #414868;
+    --text: #c0caf5; --text-secondary: #a9b1d6; --text-muted: #8b93b8;
+    --brand: #9ece6a; --brand-soft: #9ece6a1f; --brand-ink: #0c0e10;
+    --selection: #292e42;
+    --field-bg: #0e0e14; --field-dim: #39482e; --field-mid: #678549;
+    --field-lit: #9ece6a; --field-hover: #bbdd97; --field-crest: #daecc6;
+    --wm-1: #daecc6; --wm-2: #bbdd97; --wm-3: #9ece6a; --wm-4: #678549;
+    color-scheme: dark;
+  }
+
+  :root[data-theme="catppuccin"] {
+    --bg-deep: #161622;  --bg: #1e1e2e;
+    --surface: #282839;  --surface-2: #313244;
+    --border-subtle: #313244; --border-strong: #585b70;
+    --text: #cdd6f4; --text-secondary: #bac2de; --text-muted: #9399b2;
+    --brand: #89b4fa; --brand-soft: #89b4fa1f; --brand-ink: #0c0e10;
+    --selection: #45475a;
+    --field-bg: #101019; --field-dim: #34415c; --field-mid: #5b76a4;
+    --field-lit: #89b4fa; --field-hover: #accafc; --field-crest: #d2e2fd;
+    --wm-1: #d2e2fd; --wm-2: #accafc; --wm-3: #89b4fa; --wm-4: #5b76a4;
+    color-scheme: dark;
+  }
+
+  :root[data-theme="everforest"] {
+    --bg-deep: #21272c;  --bg: #2d353b;
+    --surface: #303a40;  --surface-2: #343f44;
+    --border-subtle: #343f44; --border-strong: #475258;
+    --text: #d3c6aa; --text-secondary: #c2b79c; --text-muted: #918f84;
+    --brand: #7fbbb3; --brand-soft: #7fbbb31f; --brand-ink: #0c0e10;
+    --selection: #3d484d;
+    --field-bg: #181d20; --field-dim: #374c4c; --field-mid: #587f7b;
+    --field-lit: #7fbbb3; --field-hover: #a5cfca; --field-crest: #cee5e2;
+    --wm-1: #cee5e2; --wm-2: #a5cfca; --wm-3: #7fbbb3; --wm-4: #587f7b;
+    color-scheme: dark;
+  }
+
+  :root[data-theme="nord"] {
+    --bg-deep: #222730;  --bg: #2e3440;
+    --surface: #343b49;  --surface-2: #3b4252;
+    --border-subtle: #3b4252; --border-strong: #4c566a;
+    --text: #d8dee9; --text-secondary: #ccd2de; --text-muted: #9fa7b4;
+    --brand: #81a1c1; --brand-soft: #81a1c11f; --brand-ink: #0c0e10;
+    --selection: #434c5e;
+    --field-bg: #191c23; --field-dim: #384452; --field-mid: #596e85;
+    --field-lit: #81a1c1; --field-hover: #a7bdd4; --field-crest: #cfdbe7;
+    --wm-1: #cfdbe7; --wm-2: #a7bdd4; --wm-3: #81a1c1; --wm-4: #596e85;
+    color-scheme: dark;
+  }
+
+  :root[data-theme="rose-pine-dawn"] {
+    --bg-deep: #ede7e1;  --bg: #faf4ed;
+    --surface: #fffaf3;  --surface-2: #ede7e1;
+    --border-subtle: #e1dbd5; --border-strong: #cecacd;
+    --text: #575279; --text-secondary: #5e587d; --text-muted: #6e6a8a;
+    --brand: #56949f; --brand-soft: #56949f1f; --brand-ink: #ffffff;
+    --selection: #dfdad9;
+    --field-bg: #e1dbd5; --field-dim: #b7c6c5; --field-mid: #8bafb4;
+    --field-lit: #56949f; --field-hover: #43737c; --field-crest: #2f5157;
+    --wm-1: #2f5157; --wm-2: #43737c; --wm-3: #56949f; --wm-4: #6b9ea8;
+    color-scheme: light;
+  }
+
+  /* ── Base ─────────────────────────────────────────────────────── */
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .25s ease, color .25s ease;
+  }
+
+  ::selection { background: var(--selection); }
+
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding-inline: 20px;
+  }
+
+  /* ── Entrance stagger ─────────────────────────────────────────── */
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(9px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  [data-stagger] {
+    animation: rise .5s cubic-bezier(.22,.61,.36,1) backwards;
+    animation-delay: calc(var(--stagger, 0) * 80ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-stagger] { animation: none; }
+    .caret { animation: none; }
+    *, *::before, *::after { transition-duration: .01ms !important; }
+  }
+
+  /* ── Header ───────────────────────────────────────────────────── */
+
+  .site-header {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+  }
+
+  .wordmark {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -.01em;
+    text-decoration: none;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* A 2×2 pixel block, the page's recurring mark. */
+  .glyph {
+    width: 11px;
+    height: 11px;
+    flex: none;
+    background:
+      linear-gradient(var(--field-crest) 0 0) 0 0 / 5px 5px no-repeat,
+      linear-gradient(var(--field-lit)   0 0) 6px 0 / 5px 5px no-repeat,
+      linear-gradient(var(--field-mid)   0 0) 0 6px / 5px 5px no-repeat,
+      linear-gradient(var(--field-dim)   0 0) 6px 6px / 5px 5px no-repeat;
+  }
+
+  .caret {
+    display: inline-block;
+    width: 7px;
+    height: 14px;
+    background: var(--brand);
+    vertical-align: -2px;
+    animation: blink 1.15s steps(2, start) infinite;
+  }
+
+  @keyframes blink { to { visibility: hidden; } }
+
+  .themes { display: flex; align-items: center; gap: 7px; }
+
+  .themes-label {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 10px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-right: 2px;
+  }
+
+  /* Square swatches, not dots — the grid is the motif. */
+  .swatch {
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    border: 1px solid var(--border-strong);
+    cursor: pointer;
+    transition: transform .14s ease, box-shadow .14s ease;
+  }
+
+  .swatch:hover { transform: translateY(-2px); }
+
+  .swatch[aria-pressed="true"] {
+    box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--brand);
+  }
+
+  @media (max-width: 460px) { .themes-label { display: none; } }
+
+  /* ── Hero with the pixel field ────────────────────────────────── */
+
+  .hero {
+    position: relative;
+    background: var(--field-bg);
+    border-bottom: 1px solid var(--border-subtle);
+    overflow: hidden;
+    transition: background-color .25s ease;
+  }
+
+  #field {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Keeps the copy legible over the lit squares. */
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--field-bg) 55%, transparent) 0%,
+      color-mix(in srgb, var(--field-bg) 78%, transparent) 55%,
+      var(--bg) 100%
+    );
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    padding-block: 84px 64px;
+    pointer-events: none;
+  }
+
+  .hero-inner a { pointer-events: auto; }
+
+  .prompt-line {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin: 0 0 22px;
+  }
+
+  .prompt-line .sigil { color: var(--brand); }
+
+  h1 {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: clamp(32px, 8vw, 50px);
+    font-weight: 700;
+    letter-spacing: -.04em;
+    line-height: 1.08;
+    margin: 0;
+    text-wrap: balance;
+    /* Hard-banded ramp, the way Omarchy paints its wordmark. */
+    background-image: linear-gradient(
+      to bottom,
+      var(--wm-1) 0% 22%,
+      var(--wm-2) 22% 45%,
+      var(--wm-3) 45% 75%,
+      var(--wm-4) 75% 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .tagline {
+    margin: 20px 0 0;
+    font-size: clamp(16px, 3.6vw, 19px);
+    line-height: 1.55;
+    color: var(--text-secondary);
+    text-wrap: balance;
+    max-width: 30em;
+  }
+
+  .tagline em { font-style: normal; color: var(--brand); }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 34px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 17px;
+    border-radius: 8px;
+    border: 1px solid var(--border-strong);
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    color: var(--text);
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
+  }
+
+  .btn:hover { background: var(--surface); border-color: var(--brand); }
+  .btn:active { transform: scale(.97); }
+
+  .btn-primary {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: var(--brand-ink);
+  }
+
+  .btn-primary:hover { background: var(--brand); filter: brightness(1.1); }
+
+  /* ── Sections ─────────────────────────────────────────────────── */
+
+  section { border-top: 1px solid var(--border-subtle); }
+  section:first-of-type { border-top: 0; }
+
+  .section-body { padding-block: 46px; }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .prose p {
+    margin: 0 0 16px;
+    max-width: 62ch;
+    color: var(--text-secondary);
+  }
+
+  .prose p:last-child { margin-bottom: 0; }
+  .prose strong { color: var(--text); font-weight: 500; }
+  .prose em { font-style: normal; color: var(--brand); }
+
+  code {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: .875em;
+    background: var(--brand-soft);
+    color: var(--brand);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+
+  /* ── Featured project ─────────────────────────────────────────── */
+
+  .project {
+    display: block;
+    text-decoration: none;
+    background: var(--surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 24px;
+    transition: border-color .18s ease, transform .18s ease;
+  }
+
+  .project:hover {
+    border-color: var(--brand);
+    transform: translateY(-2px);
+  }
+
+  .project-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .project h3 {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    color: var(--text);
+    letter-spacing: -.01em;
+  }
+
+  .project h3 .slash { color: var(--brand); }
+
+  .pill {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 10px;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border-strong);
+    color: var(--text-muted);
+  }
+
+  .pill-alpha { color: var(--brand); border-color: var(--brand); }
+
+  .project p {
+    margin: 12px 0 0;
+    font-size: 14px;
+    line-height: 1.62;
+    color: var(--text-secondary);
+    max-width: 62ch;
+  }
+
+  .feature-list {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 6px 24px;
+  }
+
+  .feature-list li {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .feature-list li::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    flex: none;
+    background: var(--field-mid);
+    transform: translateY(-1px);
+    transition: background-color .18s ease;
+  }
+
+  .project:hover .feature-list li::before { background: var(--field-lit); }
+
+  /* Language mix, drawn as squares — one per 2% of the codebase. */
+
+  .langs { margin-top: 22px; }
+
+  .lang-field {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    margin-bottom: 12px;
+  }
+
+  .px {
+    width: 9px;
+    height: 9px;
+    flex: none;
+    animation: pop .3s ease backwards;
+    animation-delay: calc(var(--i) * 14ms);
+  }
+
+  @keyframes pop {
+    from { opacity: 0; transform: scale(.4); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { .px { animation: none; } }
+
+  .lang-key {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .lang-key span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .lang-key i {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+  }
+
+  .note {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin: 18px 0 0;
+    max-width: 62ch;
+  }
+
+  /* ── Stack grid ───────────────────────────────────────────────── */
+
+  .stack {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 28px 32px;
+  }
+
+  .stack h3 {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    color: var(--text);
+    margin: 0 0 12px;
+  }
+
+  .stack ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .stack li {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    transition: color .18s ease;
+  }
+
+  .stack li::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    flex: none;
+    background: var(--field-dim);
+    transform: translateY(-1px);
+    transition: background-color .18s ease;
+  }
+
+  .stack li:hover { color: var(--text-secondary); }
+  .stack li:hover::before { background: var(--field-lit); }
+
+  /* ── Timeline ─────────────────────────────────────────────────── */
+
+  .timeline { display: flex; flex-direction: column; }
+
+  .entry {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 4px 20px;
+    padding-block: 15px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .entry:last-child { border-bottom: 0; }
+
+  .entry .when {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    padding-top: 2px;
+  }
+
+  .entry .what { font-size: 14px; color: var(--text); font-weight: 500; }
+
+  .entry .detail {
+    grid-column: 2;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  @media (max-width: 520px) {
+    .entry { grid-template-columns: 1fr; gap: 3px; }
+    .entry .detail { grid-column: 1; }
+  }
+
+  /* ── Facts ────────────────────────────────────────────────────── */
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 22px 28px;
+    margin: 0;
+  }
+
+  .fact dt {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .fact dd {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ── Footer ───────────────────────────────────────────────────── */
+
+  .site-footer {
+    border-top: 1px solid var(--border-subtle);
+    padding-block: 32px 44px;
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .footer-links { display: flex; flex-wrap: wrap; gap: 18px; }
+
+  .footer-links a {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+    transition: color .15s ease, border-color .15s ease;
+  }
+
+  .footer-links a:hover { color: var(--brand); border-bottom-color: var(--brand); }
+
+  .colophon {
+    font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="wordmark" href="#top"><span class="glyph" aria-hidden="true"></span>simone zuliani</a>
+    <div class="themes" role="group" aria-label="Colour theme">
+      <span class="themes-label" aria-hidden="true">theme</span>
+      <button class="swatch" type="button" data-set-theme="tokyo-night"    aria-label="Tokyo Night"    aria-pressed="true"  style="background:#9ece6a"></button>
+      <button class="swatch" type="button" data-set-theme="catppuccin"     aria-label="Catppuccin"     aria-pressed="false" style="background:#89b4fa"></button>
+      <button class="swatch" type="button" data-set-theme="everforest"     aria-label="Everforest"     aria-pressed="false" style="background:#7fbbb3"></button>
+      <button class="swatch" type="button" data-set-theme="nord"           aria-label="Nord"           aria-pressed="false" style="background:#81a1c1"></button>
+      <button class="swatch" type="button" data-set-theme="rose-pine-dawn" aria-label="Rosé Pine Dawn" aria-pressed="false" style="background:#faf4ed"></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <div class="hero">
+    <canvas id="field" aria-hidden="true"></canvas>
+    <div class="wrap hero-inner">
+      <p class="prompt-line" data-stagger style="--stagger:0"><span class="sigil">$</span> whoami<span class="caret" aria-hidden="true"></span></p>
+      <h1 data-stagger style="--stagger:1">Simone Zuliani</h1>
+      <p class="tagline" data-stagger style="--stagger:2">
+        Chartered electrical engineer who writes desktop software.
+        Python and Qt, from the <em>timeline of a video editor</em> to the
+        millisecond a machine has to be told where to reach.
+      </p>
+      <div class="cta-row" data-stagger style="--stagger:3">
+        <a class="btn btn-primary" href="#projects">Projects</a>
+        <a class="btn" href="https://github.com/Aiazzone">GitHub</a>
+        <a class="btn" href="mailto:simone.engineer@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="about">
+    <div class="wrap section-body prose">
+      <p class="eyebrow"><span class="glyph" aria-hidden="true"></span>about</p>
+      <p>
+        I started in power — substations, transmission lines, photovoltaic
+        plants — and ended up writing Python, because the interesting problem
+        stopped being the cable sizing and became
+        <strong>what the machine knows about the thing in front of it</strong>.
+      </p>
+      <p>
+        Most of what I build is a desktop application with something demanding
+        on the other end: a camera at thirty frames a second, a GPU running
+        inference, a PLC that has to receive a coordinate while it is still
+        true. The engineering is rarely the algorithm. It is keeping the UI
+        thread off the critical path, discarding what is already stale, and
+        making sure the program never slows down <em>in silence</em>.
+      </p>
+      <p>
+        I still draw schematics. The two halves talk to each other more than
+        people expect.
+      </p>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap section-body">
+      <p class="eyebrow"><span class="glyph" aria-hidden="true"></span>projects</p>
+
+      <a class="project" href="https://github.com/Aiazzone/IVE-Individual-video-editor">
+        <div class="project-head">
+          <h3><span class="slash">/</span>IVE — Individual Video Editor</h3>
+          <span class="pill pill-alpha">alpha</span>
+          <span class="pill">GPL-3.0</span>
+        </div>
+        <p>
+          A free, open-source video editor for Windows and Linux, built around
+          a CapCut-style timeline. Two ideas hold it together. Every creative
+          asset — colour looks, transitions, export presets, sticker packs —
+          is a declarative JSON file you can copy into a folder and send to a
+          friend, so nothing executes and nothing sits behind an account. And
+          every feature of the program is exposed as a typed
+          <em>Action</em>, invoked identically from the interface, from a
+          script, or from an assistant. There is nothing reachable only by
+          clicking.
+        </p>
+        <ul class="feature-list">
+          <li>Frame-accurate playback, audio clock driving A/V sync</li>
+          <li>Multi-clip timeline, trimming, snapping, real waveforms</li>
+          <li>29 colour looks with live previews on your own footage</li>
+          <li>16 transitions; a wipe is just a greyscale luma map</li>
+          <li>Lottie and SVG stickers, composited identically on export</li>
+          <li>Titles typed live onto the frame, moved with on-video handles</li>
+          <li>Music beds with ducking under speech</li>
+          <li>Social export presets — the preview graph renders the file</li>
+        </ul>
+        <div class="langs">
+          <div class="lang-field" id="langField" aria-hidden="true"></div>
+          <div class="lang-key">
+            <span><i style="background:#9ece6a"></i>Python 64.4%</span>
+            <span><i style="background:#7fbbb3"></i>QML 35.4%</span>
+            <span><i style="background:#bbdd97"></i>GLSL · Shell 0.2%</span>
+          </div>
+        </div>
+      </a>
+
+      <p class="note">
+        PySide6 / Qt Quick on the surface, FFmpeg through PyAV underneath, and
+        an engine modelled on MLT. Still early — it opens, edits, plays and
+        exports, and it breaks between commits.
+      </p>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="wrap section-body">
+      <p class="eyebrow"><span class="glyph" aria-hidden="true"></span>stack</p>
+      <div class="stack">
+        <div>
+          <h3>Applications</h3>
+          <ul>
+            <li>Python</li>
+            <li>PySide6 / Qt Quick, PyQt5</li>
+            <li>Threading, real-time pipelines</li>
+            <li>PyInstaller packaging</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Media &amp; vision</h3>
+          <ul>
+            <li>FFmpeg, PyAV</li>
+            <li>OpenCV, GLSL shaders</li>
+            <li>YOLO / Ultralytics, PyTorch</li>
+            <li>TensorRT, ONNX, OpenVINO</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Industrial I/O</h3>
+          <ul>
+            <li>Siemens S7-1500 / TIA Portal</li>
+            <li>python-snap7, S7 data blocks</li>
+            <li>3D time-of-flight cameras</li>
+            <li>RTSP / GigE / USB acquisition</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Electrical design</h3>
+          <ul>
+            <li>EPLAN Electric P8 · Pro Panel</li>
+            <li>EPLAN API scripting (C#)</li>
+            <li>LV / MV / HV protection</li>
+            <li>NBR 5419 · IEC 62305</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="background">
+    <div class="wrap section-body">
+      <p class="eyebrow"><span class="glyph" aria-hidden="true"></span>background</p>
+      <div class="timeline">
+
+        <div class="entry">
+          <div class="when">2014 —</div>
+          <div class="what">Senior electrical designer &amp; software developer</div>
+          <div class="detail">
+            New-product development for beverage-industry machinery: electrical
+            design, technology selection, and the vision software that ships
+            with the machines.
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="when">2012 – 2014</div>
+          <div class="what">Electrical engineer, high-voltage substations</div>
+          <div class="detail">
+            Commissioning tests, connection verification, switchgear and panel
+            design.
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="when">2010 – 2012</div>
+          <div class="what">Design engineer, photovoltaic &amp; building systems</div>
+          <div class="detail">
+            PV plant design through to grid connection — cable sizing, inverter
+            selection, protection. Home automation and alarm systems for
+            class A+ buildings.
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="when">2009 – 2010</div>
+          <div class="what">Research internship, public administration</div>
+          <div class="detail">
+            Wrote an algorithm to assess the magnetic fields generated by a
+            city's electrical substations.
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="when">2011</div>
+          <div class="what">Chartered engineer — Ordine degli Ingegneri</div>
+          <div class="detail">Italian state professional examination.</div>
+        </div>
+
+        <div class="entry">
+          <div class="when">2007 – 2010</div>
+          <div class="what">MSc Electrical Engineering</div>
+          <div class="detail">Università degli Studi di Padova.</div>
+        </div>
+
+        <div class="entry">
+          <div class="when">2003 – 2007</div>
+          <div class="what">BSc Energy Engineering</div>
+          <div class="detail">
+            Electrical, thermal and mechanical. Università degli Studi di Padova.
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="when">1998 – 2003</div>
+          <div class="what">Perito elettrico — I.T.I.S. G. Ferraris</div>
+          <div class="detail">Technical secondary school, electrical specialisation.</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="details">
+    <div class="wrap section-body">
+      <p class="eyebrow"><span class="glyph" aria-hidden="true"></span>details</p>
+      <dl class="facts">
+        <div class="fact">
+          <dt>Languages</dt>
+          <dd>Italian &amp; Portuguese (native)<br>English · Spanish</dd>
+        </div>
+        <div class="fact">
+          <dt>Certifications</dt>
+          <dd>NR-10 electrical safety<br>Chartered engineer, Italy</dd>
+        </div>
+        <div class="fact">
+          <dt>Standards</dt>
+          <dd>NBR 5419 · IEC 62305<br>Lightning &amp; surge protection</dd>
+        </div>
+        <div class="fact">
+          <dt>Open to</dt>
+          <dd>Desktop, media and machine-vision work</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-links">
+      <a href="https://github.com/Aiazzone">github</a>
+      <a href="mailto:simone.engineer@gmail.com">email</a>
+      <a href="https://www.linkedin.com/in/simonezuliani/">linkedin</a>
+    </div>
+    <span class="colophon">theme: <span data-theme-name>tokyo night</span></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  /* ── Language field ────────────────────────────────────────────
+     50 squares, one per 2% of the repository's bytes.            */
+
+  (function paintLangs() {
+    var host = document.getElementById("langField");
+    if (!host) return;
+    var mix = [
+      { n: 32, c: "#9ece6a" },  // Python
+      { n: 17, c: "#7fbbb3" },  // QML
+      { n: 1,  c: "#bbdd97" }   // GLSL + Shell
+    ];
+    var i = 0, html = "";
+    mix.forEach(function (part) {
+      for (var k = 0; k < part.n; k++, i++) {
+        html += '<span class="px" style="--i:' + i + ';background:' + part.c + '"></span>';
+      }
+    });
+    host.innerHTML = html;
+  })();
+
+  /* ── Hero pixel field ──────────────────────────────────────────
+     A grid of squares breathing on a slow diagonal wave, lifting
+     toward the crest colour near the pointer. Capped at 30fps and
+     parked whenever the hero is off screen or the tab is hidden.  */
+
+  (function field() {
+    var canvas = document.getElementById("field");
+    if (!canvas) return;
+    var ctx = canvas.getContext("2d", { alpha: false });
+    if (!ctx) return;
+
+    var CELL = 14, SQ = 10, RADIUS = 130;
+    var cols = 0, rows = 0, w = 0, h = 0, dpr = 1;
+    var ramp = [];
+    var pointer = { x: -9999, y: -9999, on: false };
+    var running = false, last = 0, raf = 0;
+
+    function readRamp() {
+      var cs = getComputedStyle(root);
+      ramp = ["--field-bg", "--field-dim", "--field-mid", "--field-lit", "--field-hover", "--field-crest"]
+        .map(function (v) { return cs.getPropertyValue(v).trim() || "#000"; });
+    }
+
+    function resize() {
+      var r = canvas.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1) return;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = r.width; h = r.height;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(w / CELL) + 1;
+      rows = Math.ceil(h / CELL) + 1;
+      draw(performance.now());
+    }
+
+    function draw(now) {
+      if (!ramp.length) readRamp();
+      var t = now / 1000;
+
+      ctx.fillStyle = ramp[0];
+      ctx.fillRect(0, 0, w, h);
+
+      for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+          // Slow diagonal wave: most cells sit dark, a band travels through.
+          var wave = Math.sin((x * 0.26) + (y * 0.19) - t * 0.55);
+          var level = wave > 0.72 ? 2 : (wave > 0.2 ? 1 : 0);
+
+          if (pointer.on) {
+            var cx = x * CELL + SQ / 2;
+            var cy = y * CELL + SQ / 2;
+            var d = Math.hypot(cx - pointer.x, cy - pointer.y);
+            if (d < RADIUS) {
+              // Nearer the pointer, the higher up the ramp the square goes.
+              level += Math.round((1 - d / RADIUS) * 3.4);
+            }
+          }
+
+          if (level <= 0) continue;
+          if (level > 5) level = 5;
+          ctx.fillStyle = ramp[level];
+          ctx.fillRect(x * CELL, y * CELL, SQ, SQ);
+        }
+      }
+    }
+
+    function frame(now) {
+      if (!running) return;
+      if (now - last > 33) { last = now; draw(now); }
+      raf = requestAnimationFrame(frame);
+    }
+
+    function start() {
+      if (running || reduced.matches) return;
+      running = true;
+      raf = requestAnimationFrame(frame);
+    }
+
+    function stop() {
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    }
+
+    window.addEventListener("pointermove", function (e) {
+      var r = canvas.getBoundingClientRect();
+      pointer.x = e.clientX - r.left;
+      pointer.y = e.clientY - r.top;
+      pointer.on = pointer.y > -RADIUS && pointer.y < r.height + RADIUS;
+      if (reduced.matches) draw(performance.now());
+    }, { passive: true });
+
+    window.addEventListener("pointerleave", function () { pointer.on = false; });
+
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) { stop(); } else { start(); }
+    });
+
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        entries[0].isIntersecting ? start() : stop();
+      }, { threshold: 0 }).observe(canvas);
+    } else {
+      start();
+    }
+
+    var resizeTimer = 0;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 120);
+    });
+
+    readRamp();
+    resize();
+    start();
+
+    // Repaint with the new palette when a theme is picked.
+    window.addEventListener("themechange", function () {
+      readRamp();
+      draw(performance.now());
+    });
+  })();
+
+  /* ── Theme switcher ───────────────────────────────────────────── */
+
+  (function themes() {
+    var LABELS = {
+      "tokyo-night": "tokyo night",
+      "catppuccin": "catppuccin",
+      "everforest": "everforest",
+      "nord": "nord",
+      "rose-pine-dawn": "rosé pine dawn"
+    };
+
+    var buttons = document.querySelectorAll("[data-set-theme]");
+    var nameEl = document.querySelector("[data-theme-name]");
+
+    function apply(theme) {
+      if (theme === "tokyo-night") {
+        root.removeAttribute("data-theme");
+      } else {
+        root.setAttribute("data-theme", theme);
+      }
+      buttons.forEach(function (b) {
+        b.setAttribute("aria-pressed", String(b.dataset.setTheme === theme));
+      });
+      if (nameEl) nameEl.textContent = LABELS[theme] || theme;
+      try { localStorage.setItem("theme", theme); } catch (e) { /* private mode */ }
+      // Let the canvas pick the new ramp up on the next tick.
+      requestAnimationFrame(function () {
+        window.dispatchEvent(new Event("themechange"));
+      });
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener("click", function () { apply(b.dataset.setTheme); });
+    });
+
+    var saved = null;
+    try { saved = localStorage.getItem("theme"); } catch (e) { /* private mode */ }
+    if (saved && LABELS[saved]) apply(saved);
+  })();
+})();
+</script>
+</body>
+</html>
