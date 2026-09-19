@@ -236,15 +236,16 @@
     display: block;
   }
 
-  /* Keeps the copy legible over the lit squares. */
+  /* A light scrim only — the squares have to stay clearly visible.
+     Legibility of the copy is handled by text-shadow below.        */
   .hero::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--field-bg) 55%, transparent) 0%,
-      color-mix(in srgb, var(--field-bg) 78%, transparent) 55%,
+      color-mix(in srgb, var(--field-bg) 34%, transparent) 0%,
+      color-mix(in srgb, var(--field-bg) 40%, transparent) 62%,
       var(--bg) 100%
     );
     pointer-events: none;
@@ -262,8 +263,9 @@
   .prompt-line {
     font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
     font-size: 12.5px;
-    color: var(--text-muted);
+    color: var(--text-secondary);
     margin: 0 0 22px;
+    text-shadow: 0 1px 6px var(--field-bg), 0 0 14px var(--field-bg);
   }
 
   .prompt-line .sigil { color: var(--brand); }
@@ -296,6 +298,7 @@
     color: var(--text-secondary);
     text-wrap: balance;
     max-width: 30em;
+    text-shadow: 0 1px 8px var(--field-bg), 0 0 18px var(--field-bg);
   }
 
   .tagline em { font-style: normal; color: var(--brand); }
@@ -960,11 +963,23 @@
     var ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
 
-    var CELL = 14, SQ = 10, RADIUS = 130;
+    var CELL = 14, SQ = 10, RADIUS = 150;
     var cols = 0, rows = 0, w = 0, h = 0, dpr = 1;
     var ramp = [];
     var pointer = { x: -9999, y: -9999, on: false };
+    var lastTouch = -1e9;          // when a real pointer was last seen
     var running = false, last = 0, raf = 0;
+
+    // With no mouse — every phone — a virtual light drifts across the
+    // field on a Lissajous path, so the squares still come alive.
+    function lightSource(t, now) {
+      if (pointer.on && now - lastTouch < 2500) return pointer;
+      return {
+        x: w * (0.5 + 0.36 * Math.sin(t * 0.29)),
+        y: h * (0.5 + 0.32 * Math.sin(t * 0.43 + 1.1)),
+        on: true
+      };
+    }
 
     function readRamp() {
       var cs = getComputedStyle(root);
@@ -988,24 +1003,31 @@
     function draw(now) {
       if (!ramp.length) readRamp();
       var t = now / 1000;
+      var src = lightSource(t, now);
 
       ctx.fillStyle = ramp[0];
       ctx.fillRect(0, 0, w, h);
 
       for (var y = 0; y < rows; y++) {
         for (var x = 0; x < cols; x++) {
-          // Slow diagonal wave: most cells sit dark, a band travels through.
-          var wave = Math.sin((x * 0.26) + (y * 0.19) - t * 0.55);
-          var level = wave > 0.72 ? 2 : (wave > 0.2 ? 1 : 0);
+          // Two crossing waves: a fast diagonal band over a slow swell,
+          // so bright crests keep travelling through the grid on their own.
+          var band  = Math.sin(x * 0.30 + y * 0.22 - t * 0.85);
+          var swell = Math.sin(x * 0.11 - y * 0.17 + t * 0.42);
+          var e = band * 0.68 + swell * 0.32;
 
-          if (pointer.on) {
-            var cx = x * CELL + SQ / 2;
-            var cy = y * CELL + SQ / 2;
-            var d = Math.hypot(cx - pointer.x, cy - pointer.y);
-            if (d < RADIUS) {
-              // Nearer the pointer, the higher up the ramp the square goes.
-              level += Math.round((1 - d / RADIUS) * 3.4);
-            }
+          var level =
+            e >  0.92 ? 4 :
+            e >  0.74 ? 3 :
+            e >  0.42 ? 2 :
+            e > -0.10 ? 1 : 0;
+
+          var cx = x * CELL + SQ / 2;
+          var cy = y * CELL + SQ / 2;
+          var d = Math.hypot(cx - src.x, cy - src.y);
+          if (d < RADIUS) {
+            // Closer to the light, the higher up the ramp the square goes.
+            level += Math.round((1 - d / RADIUS) * 3.2);
           }
 
           if (level <= 0) continue;
@@ -1034,14 +1056,17 @@
       raf = 0;
     }
 
-    window.addEventListener("pointermove", function (e) {
+    function track(e) {
       var r = canvas.getBoundingClientRect();
       pointer.x = e.clientX - r.left;
       pointer.y = e.clientY - r.top;
       pointer.on = pointer.y > -RADIUS && pointer.y < r.height + RADIUS;
+      lastTouch = performance.now();
       if (reduced.matches) draw(performance.now());
-    }, { passive: true });
+    }
 
+    window.addEventListener("pointermove", track, { passive: true });
+    window.addEventListener("pointerdown", track, { passive: true });
     window.addEventListener("pointerleave", function () { pointer.on = false; });
 
     document.addEventListener("visibilitychange", function () {
